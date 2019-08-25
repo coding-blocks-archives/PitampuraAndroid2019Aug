@@ -6,62 +6,82 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/number1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:padding="20dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Hello World!"
-            android:textSize="30sp" />
-
-        <TextView
-            android:padding="20dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Hello World!"
-            android:textSize="30sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:padding="20dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Hello World!"
-            android:textSize="30sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:padding="20dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Hello World!"
-            android:textSize="30sp" />
-    </LinearLayout>
+        android:hint="First Name"
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/et1"
+        android:id="@+id/number2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Full Name"
+        android:hint="First Name"
         android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btn1"
-        android:text="Get Text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Get Result" />
 
+    <TextView
+        android:id="@+id/resultTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Result"
+        android:padding="20dp"
+        android:textSize="30sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/plusBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="+"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/subtractBtn"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="-"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/divideBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="/"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/multiplyBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:text="*"
+            android:textSize="30sp" />
+    </LinearLayout>
 
 </LinearLayout>
