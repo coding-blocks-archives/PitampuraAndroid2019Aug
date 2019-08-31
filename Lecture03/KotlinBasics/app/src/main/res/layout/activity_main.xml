@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/root"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -12,48 +13,61 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_centerInParent="true"
+        android:layout_weight="1"
         android:text="Button" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_toLeftOf="@id/button"
-        android:layout_below="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_toLeftOf="@id/button"
         android:layout_weight="1"
         android:text="Button" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_toRightOf="@id/button"
-        android:layout_below="@id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/button"
+        android:layout_toRightOf="@id/button"
         android:layout_weight="1"
         android:text="Button" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_weight="1"
         android:text="Button" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Button" />
 
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Button" />
+    <FrameLayout
+
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/colorAccent"
+            android:layout_marginStart="50dp"
+            android:src="@drawable/ic_jetpack_hero" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:background="@color/colorPrimary"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_jetpack_hero"
+           />
+    </FrameLayout>
+
+
 </RelativeLayout>
