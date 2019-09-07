@@ -1,14 +1,21 @@
 package com.codingblocks.listview
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    val list = ArrayList<String>()
-
+    val movies = arrayOf("Iron Man", "Thor", "Captain America", "Black Panther", "Endgame")
+    val yearofRelease = arrayOf("2008", "2010", "2011", "2018", "2019")
+    val actors = arrayOf("RDJ", "Chris Hemsworth", "Chris Evans", "Chadwick", "Tom Holland")
+    val image = arrayOf(
+        R.drawable.ironman,
+        R.drawable.thor,
+        R.drawable.cap,
+        R.drawable.blackpanther,
+        R.drawable.avenger
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,33 +26,26 @@ class MainActivity : AppCompatActivity() {
 
         list.addAll(
             listOf(
-                "Iron Man",
-                "Captain America",
-                "Thor",
-                "Captain Marvel",
-                "Endgame",
-                "Hulk",
-                "Iron Man",
-                "Captain America",
-                "Thor",
-                "Captain Marvel",
-                "Endgame",
-                "Hulk",
-                "Iron Man",
-                "Captain America",
-                "Thor",
-                "Captain Marvel",
-                "Endgame",
-                "Hulk"
+                Movie("Iron Man", "", "", 1)
             )
         )
-        lv.adapter =
-            ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_expandable_list_item_1,
-                list
-            )
+        val movie = Movie("Iron Man", "", "", 1)
+        Log.i("Class", "" + movie.toString())
+
+//        lv.adapter =
+//            ArrayAdapter<String>(
+//                this,
+//                android.R.layout.simple_expandable_list_item_1,
+//                list
+//            )
 
 
     }
 }
+
+data class Movie(
+    val name: String,
+    val year: String,
+    val actor: String,
+    val image: Int
+)
