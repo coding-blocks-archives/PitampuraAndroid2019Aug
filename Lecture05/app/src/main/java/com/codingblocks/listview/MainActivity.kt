@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_movie.view.*
@@ -46,7 +47,14 @@ class MainActivity : AppCompatActivity() {
 //                android.R.layout.simple_expandable_list_item_1,
 //                list
 //            )
-        lv.adapter = MovieAdapter(list)
+        val adapter = MovieAdapter(list)
+        adapter.onItemClickListener = object : MovieonItemClickListener {
+            override fun onItemClick(movie: Movie) {
+                Toast.makeText(this@MainActivity, "${movie.name}", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+        lv.adapter = adapter
 
     }
 }
@@ -59,12 +67,26 @@ data class Movie(
 )
 
 class MovieAdapter(val movies: ArrayList<Movie>) : BaseAdapter() {
+    var onItemClickListener: MovieonItemClickListener? = null
+
     override fun getView(pos: Int, convertView: View?, parent: ViewGroup): View {
         val inflator = LayoutInflater.from(parent.context)
-        val view = inflator.inflate(R.layout.item_movie, parent, false)
+        val view: View
+
+
+//        if (convertView == null) {
+//            view = inflator.inflate(R.layout.item_movie, parent, false)
+//
+//        } else {
+//            view = convertView
+//        }
+        view = convertView ?: inflator.inflate(R.layout.item_movie, parent, false)
         view.titleTv.text = movies[pos].name + "(" + movies[pos].year + ")"
         view.actorTv.text = movies[pos].actor
         view.imageView.setImageResource(movies[pos].image)
+        view.setOnClickListener {
+            onItemClickListener?.onItemClick(movies[pos])
+        }
         return view
     }
 
@@ -74,4 +96,8 @@ class MovieAdapter(val movies: ArrayList<Movie>) : BaseAdapter() {
 
 
     override fun getCount(): Int = movies.size
+}
+
+interface MovieonItemClickListener {
+    fun onItemClick(movie: Movie)
 }
