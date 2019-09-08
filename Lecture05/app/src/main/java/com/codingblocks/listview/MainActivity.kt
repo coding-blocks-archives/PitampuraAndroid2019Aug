@@ -47,14 +47,19 @@ class MainActivity : AppCompatActivity() {
 //                android.R.layout.simple_expandable_list_item_1,
 //                list
 //            )
-        val adapter = MovieAdapter(list)
+        /*
+        MovieAdapter adapter = new MovieAdapter(list)
+        MovieOnItemClickListener onItemClickListner
+        adapter.onitemClickListener = 5
+
+         */
+        val adapter = MovieAdapter(list);
         adapter.onItemClickListener = object : MovieonItemClickListener {
             override fun onItemClick(movie: Movie) {
-                Toast.makeText(this@MainActivity, "${movie.name}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,  "${movie.name}", Toast.LENGTH_SHORT).show()
             }
 
         }
-        lv.adapter = adapter
 
     }
 }
@@ -101,3 +106,12 @@ class MovieAdapter(val movies: ArrayList<Movie>) : BaseAdapter() {
 interface MovieonItemClickListener {
     fun onItemClick(movie: Movie)
 }
+
+/*
+Class a{
+}
+
+Class B{
+A a = new a
+}
+ */
