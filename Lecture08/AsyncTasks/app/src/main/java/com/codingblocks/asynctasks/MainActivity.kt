@@ -1,8 +1,8 @@
 package com.codingblocks.asynctasks
 
-import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,15 +13,36 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btn.setOnClickListener {
-//            val currentTime = System.currentTimeMillis()
+            val cTask = CountTask()
+            cTask.execute(10)
+        }
 
-//            while (System.currentTimeMillis() < currentTime + 10000){}
-            val handler = Handler()
-            handler.postDelayed(object :Runnable{
-                override fun run() {
-                    root.setBackgroundColor(Color.RED)
-                }
-            },10000)
+
+    }
+
+    inner class CountTask : AsyncTask<Int, Int, Void>() {
+        override fun onProgressUpdate(vararg values: Int?) {
+            super.onProgressUpdate(*values)
+            text.setText(values[0].toString())
+        }
+
+        override fun doInBackground(vararg number: Int?): Void? {
+            Log.i("AsynckTask", "Work Started")
+            val number = number[0]
+            for (i in 0..number!!) {
+                waitNsec(1)
+                publishProgress(i)
+            }
+            Log.i("AsynckTask", "Work Ended")
+
+
+            return null
+        }
+
+        private fun waitNsec(n: Int) {
+            val currentTime = System.currentTimeMillis()
+            while (System.currentTimeMillis() < currentTime + n * 1000) {
+            }
         }
 
     }
