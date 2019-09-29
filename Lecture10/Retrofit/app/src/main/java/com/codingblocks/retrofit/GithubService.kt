@@ -6,6 +6,9 @@ import retrofit2.http.GET
 interface GithubService {
 
     @GET("users/aggarwalpulkit596")
-    fun getUser() : Call<String>
+    fun getUser() : Call<User>
+
+    @GET("users")
+    fun getAllUsers() : Call<List<User>>
 
 }
