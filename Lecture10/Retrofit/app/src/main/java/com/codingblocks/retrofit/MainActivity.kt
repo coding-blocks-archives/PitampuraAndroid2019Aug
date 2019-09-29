@@ -2,6 +2,7 @@ package com.codingblocks.retrofit
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -14,6 +15,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        rvUsers.layoutManager = LinearLayoutManager(this)
+
+
+//        Client.api.getAllUsers().enqueue(object : Callback<List<User>> {
+//            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+//            }
+//
+//            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+//                val adapter = UsersAdapter(response.body() as ArrayList<User>)
+//                rvUsers.adapter = adapter
+//            }
+//
+//        })
+        Client.api.getAllUsers()
+            .enqueue(retrofitCallback { throwable, response ->
+                val adapter = UsersAdapter(response?.body() as ArrayList<User>)
+                rvUsers.adapter = adapter
+            })
 
     }
 
@@ -41,8 +60,8 @@ class MainActivity : AppCompatActivity() {
 }
 
 data class User(
-    val name:String,
-    val login:String,
+    val name: String,
+    val login: String,
     val gistsUrl: String,
     val reposUrl: String,
     val followingUrl: String,
