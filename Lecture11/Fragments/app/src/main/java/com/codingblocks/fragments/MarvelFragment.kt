@@ -7,37 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_blank.*
+import kotlinx.android.synthetic.main.fragment_marvel.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class BlankFragment : Fragment() {
+class MarvelFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_blank, container, false)
-        return view
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_marvel, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val text = arguments?.getString("NAME")
-        var list = arrayOf("")
-        if (text == "MARVEL") {
-            list = arrayOf("Iron Man", "Black Panther", "Thor", "Avengers")
-
-        } else {
-            list = arrayOf("AquaMan", "Superman", "Wonder Woman", "Joker", "Sucide Squad")
-
-        }
         val adapter = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_expandable_list_item_1,
-            list
+            arrayOf("Iron Man", "Black Panther", "Thor", "Avengers")
         )
         lv.adapter = adapter
 
@@ -45,3 +36,5 @@ class BlankFragment : Fragment() {
 
 
 }
+
+
