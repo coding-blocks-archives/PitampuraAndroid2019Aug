@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 //
 //        })
         Client.api.getAllUsers()
-            .enqueue(retrofitCallback { throwable, response ->
+            .enqueue(retrofitCallback {
+                    throwable, response ->
                 val adapter = UsersAdapter(response?.body() as ArrayList<User>)
                 rvUsers.adapter = adapter
             })
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        Client.api.getUser().enqueue(object : Callback<User> {
+        Client.api.getUser("uditjain-cyber").enqueue(object : Callback<User> {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
