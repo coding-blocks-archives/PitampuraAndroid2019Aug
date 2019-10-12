@@ -2,6 +2,7 @@ package com.codingblocks.notewithroom
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.codingblocks.notewithroom.models.Todo
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
             this,
             AppDatabase::class.java,
             "todo.db"
-        )
+        ).fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
     }
@@ -26,19 +27,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        todoList.addAll(db.todoDao().getAllTodo())
-
-        todoRv.layoutManager = LinearLayoutManager(this)
         val adapter = TodoAdapter(todoList)
+
+        db.todoDao().getAllTodo().observe(this, Observer {
+            todoList.clear()
+            todoList.addAll(it)
+            adapter.notifyDataSetChanged()
+        })
+        todoRv.layoutManager = LinearLayoutManager(this)
         todoRv.adapter = adapter
 
         button.setOnClickListener {
             db.todoDao().insertTodo((Todo(name = editText.text.toString(), status = false)))
-            todoList.clear()
-            todoList.addAll(db.todoDao().getAllTodo())
-            adapter.notifyDataSetChanged()
-
         }
     }
 }

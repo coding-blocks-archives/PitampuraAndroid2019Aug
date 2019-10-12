@@ -1,5 +1,6 @@
 package com.codingblocks.notewithroom.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -16,7 +17,7 @@ interface TodoDao {
     fun insertAll(todoList:ArrayList<Todo>)
 
     @Query("Select * FROM TODO")
-    fun getAllTodo() : List<Todo>
+    fun getAllTodo() : LiveData<List<Todo>>
 
     @Delete
     fun delete(todo:Todo)
