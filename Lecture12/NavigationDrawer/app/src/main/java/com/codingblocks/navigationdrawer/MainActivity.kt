@@ -19,12 +19,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_home -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container,HomeFragment())
+                    .replace(R.id.container, HomeFragment())
             }
             R.id.nav_gallery -> {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container,GalleryFragment())
+                    .replace(R.id.container, GalleryFragment())
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
