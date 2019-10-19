@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -21,5 +22,12 @@ class MainActivity : AppCompatActivity() {
         val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"myfile.txt")
 
         file.writeText("Hello World")
+
+        button.setOnClickListener {
+            file.appendText(editText.text.toString())
+        }
+        button2.setOnClickListener {
+            editText.setText(file.readText())
+        }
     }
 }
