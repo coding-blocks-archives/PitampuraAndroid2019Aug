@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="1dp"
         app:passwordToggleEnabled="true"
+        android:id="@+id/nameInpLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         tools:layout_editor_absoluteY="75dp">
 
@@ -28,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true"
+        android:id="@+id/passInpLayout"
         android:layout_marginTop="8dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         tools:layout_editor_absoluteX="1dp"
@@ -46,6 +48,6 @@
         android:layout_marginTop="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In" />
+        android:text="Sign In" />
 
 </LinearLayout>
