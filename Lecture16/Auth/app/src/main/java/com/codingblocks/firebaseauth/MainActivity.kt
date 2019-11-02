@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         auth.addAuthStateListener {
             if (it.currentUser != null) {
+                startActivity(Intent(this,ChatActivity::class.java))
                 button.text = "Logout"
             } else {
                 button.text = "Sign In"
