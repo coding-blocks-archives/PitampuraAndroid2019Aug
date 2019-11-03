@@ -16,8 +16,12 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executor
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), Executor {
+
+    var lastStamp = 0L
+
     override fun execute(p0: Runnable) {
         p0.run()
     }
@@ -82,40 +86,51 @@ class MainActivity : AppCompatActivity(), Executor {
 
     inner class LabelAnalyzer : ImageAnalysis.Analyzer {
         override fun analyze(image: ImageProxy, rotationDegrees: Int) {
-            val x = image.planes[0]
-            val y = image.planes[1]
-            val z = image.planes[2]
 
-            val xb = x.buffer.remaining()
-            val yb = y.buffer.remaining()
-            val zb = z.buffer.remaining()
+            val cureentStampt = System.currentTimeMillis()
+            if (cureentStampt - lastStamp >= TimeUnit.SECONDS.toMillis(2)) {
 
-            val result: Int = when (rotationDegrees) {
-                0 -> FirebaseVisionImageMetadata.ROTATION_0
-                90 -> FirebaseVisionImageMetadata.ROTATION_90
-                180 -> FirebaseVisionImageMetadata.ROTATION_180
-                270 -> FirebaseVisionImageMetadata.ROTATION_270
-                else -> FirebaseVisionImageMetadata.ROTATION_0
+                lastStamp = cureentStampt
+                val x = image.planes[0]
+                val y = image.planes[1]
+                val z = image.planes[2]
+
+                val xb = x.buffer.remaining()
+                val yb = y.buffer.remaining()
+                val zb = z.buffer.remaining()
+
+                val result: Int = when (rotationDegrees) {
+                    0 -> FirebaseVisionImageMetadata.ROTATION_0
+                    90 -> FirebaseVisionImageMetadata.ROTATION_90
+                    180 -> FirebaseVisionImageMetadata.ROTATION_180
+                    270 -> FirebaseVisionImageMetadata.ROTATION_270
+                    else -> FirebaseVisionImageMetadata.ROTATION_0
+
+                }
+                val data = ByteArray(xb + yb + zb)
+
+                x.buffer.get(data, 0, xb)
+                y.buffer.get(data, xb, yb)
+                z.buffer.get(data, xb + yb, zb)
+
+                val metaData = FirebaseVisionImageMetadata.Builder()
+                    .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_YV12)
+                    .setHeight(image.height)
+                    .setWidth(image.width)
+                    .setRotation(result)
+                    .build()
+
+                val labelImage = FirebaseVisionImage.fromByteArray(data, metaData)
+
+                FirebaseVision.getInstance().getOnDeviceImageLabeler()
+                    .processImage(labelImage)
+                    .addOnSuccessListener {
+                        if (it.isNotEmpty()) {
+                            label.text = it[0].text + "   " + it[0].confidence
+                        }
+                    }
 
             }
-            val data = ByteArray(xb + yb + zb)
-            val metaData = FirebaseVisionImageMetadata.Builder()
-                .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_YV12)
-                .setHeight(image.height)
-                .setWidth(image.width)
-                .setRotation(result)
-                .build()
-
-            val labelImage = FirebaseVisionImage.fromByteArray(data, metaData)
-
-            FirebaseVision.getInstance().getOnDeviceImageLabeler()
-                .processImage(labelImage)
-                .addOnSuccessListener {
-                    if (it.isNotEmpty()) {
-                        label.text = it[0].text + "   " + it[0].confidence
-                    }
-                }
-
         }
 
     }
