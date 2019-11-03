@@ -78,3 +78,24 @@ data class ChatMessage(
 {
     constructor() : this("","",0L)
 }
+
+/**
+ *{
+"rules": {
+"messages" : {
+".write":"auth != null",
+".read":"auth != null",
+"$msg" : {
+".validate": "newData.hasChildren(['name','time','message'])",
+"message":{
+".validate":"newData.isString()"
+}
+}
+},
+"message" : {
+".write":true,
+".read":true
+}
+}
+}
+ **/
