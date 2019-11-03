@@ -3,6 +3,9 @@ package com.android.mlkit
 import android.content.pm.PackageManager
 import android.graphics.Matrix
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Rational
 import android.view.Surface
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -44,18 +47,24 @@ class MainActivity : AppCompatActivity(), Executor {
 
 
         val anaLyzerConfig = ImageAnalysisConfig.Builder().apply {
+            val thread = HandlerThread("Label").apply {
+                start()
+            }
+            setCallbackHandler(
+                Handler(thread.looper)
+            )
             setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
         }.build()
 
 
         val analyzerCase = ImageAnalysis(anaLyzerConfig).apply {
-            setAnalyzer(this@MainActivity,LabelAnalyzer())
+            setAnalyzer(LabelAnalyzer())
         }
 
 
         val previewConfig = PreviewConfig.Builder().apply {
-            setTargetAspectRatio(AspectRatio.RATIO_16_9)
-            setLensFacing(CameraX.LensFacing.FRONT)
+            setTargetAspectRatio(Rational(1, 1))
+            setLensFacing(CameraX.LensFacing.BACK)
         }.build()
 
         val preview = Preview(previewConfig)
@@ -68,7 +77,7 @@ class MainActivity : AppCompatActivity(), Executor {
             textureView.surfaceTexture = it.surfaceTexture
         }
 
-        CameraX.bindToLifecycle(this, preview,analyzerCase)
+        CameraX.bindToLifecycle(this, preview, analyzerCase)
     }
 
     inner class LabelAnalyzer : ImageAnalysis.Analyzer {
@@ -81,14 +90,20 @@ class MainActivity : AppCompatActivity(), Executor {
             val yb = y.buffer.remaining()
             val zb = z.buffer.remaining()
 
+            val result: Int = when (rotationDegrees) {
+                0 -> FirebaseVisionImageMetadata.ROTATION_0
+                90 -> FirebaseVisionImageMetadata.ROTATION_90
+                180 -> FirebaseVisionImageMetadata.ROTATION_180
+                270 -> FirebaseVisionImageMetadata.ROTATION_270
+                else -> FirebaseVisionImageMetadata.ROTATION_0
 
+            }
             val data = ByteArray(xb + yb + zb)
-
             val metaData = FirebaseVisionImageMetadata.Builder()
                 .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_YV12)
                 .setHeight(image.height)
                 .setWidth(image.width)
-                .setRotation(rotationDegrees)
+                .setRotation(result)
                 .build()
 
             val labelImage = FirebaseVisionImage.fromByteArray(data, metaData)
