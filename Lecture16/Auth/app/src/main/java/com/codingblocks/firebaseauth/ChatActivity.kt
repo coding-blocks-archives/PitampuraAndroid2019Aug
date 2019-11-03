@@ -9,12 +9,17 @@ import com.firebase.ui.database.FirebaseListOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.smartreply.FirebaseTextMessage
 import kotlinx.android.synthetic.main.activity_chat.*
-import java.text.DateFormat
 import java.util.*
 
 
 class ChatActivity : AppCompatActivity() {
+
+
+    val reply = FirebaseNaturalLanguage.getInstance().smartReply
+    val list = arrayListOf<FirebaseTextMessage>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +33,8 @@ class ChatActivity : AppCompatActivity() {
             .build()
 
         user?.updateProfile(profileUpdates)
+
+
 
         button2.setOnClickListener {
 
@@ -43,6 +50,23 @@ class ChatActivity : AppCompatActivity() {
             input.setText("")
         }
 
+        button3.setOnClickListener {
+            reply.suggestReplies(list.takeLast(2)).addOnSuccessListener {
+                if(it.suggestions.isNotEmpty())
+                    it.suggestions[0].apply {
+                        FirebaseDatabase.getInstance().reference.child("messages")
+                            .push()
+                            .setValue(
+                                ChatMessage(
+                                    text,
+                                    FirebaseAuth.getInstance().currentUser?.displayName!!,
+                                    Date().time
+                                )
+                            )
+                    }
+            }
+        }
+
 
         val query = FirebaseDatabase.getInstance()
             .reference
@@ -55,13 +79,20 @@ class ChatActivity : AppCompatActivity() {
 
         val adapter = object : FirebaseListAdapter<ChatMessage>(options) {
             override fun populateView(v: View, model: ChatMessage, position: Int) {
+                list.add(
+                    FirebaseTextMessage.createForRemoteUser(
+                        model.message,
+                        model.time,
+                        model.name
+                    )
+                )
                 val message = v.findViewById<TextView>(R.id.message)
                 val name = v.findViewById<TextView>(R.id.name)
                 val time = v.findViewById<TextView>(R.id.time)
 
                 message.text = model.message
                 name.text = model.name
-                time.text = android.text.format.DateFormat.format("dd-MMM-yy HH:mm:ss",model.time)
+                time.text = android.text.format.DateFormat.format("dd-MMM-yy HH:mm:ss", model.time)
             }
         }
         adapter.startListening()
@@ -74,9 +105,8 @@ data class ChatMessage(
     val message: String,
     val name: String,
     val time: Long
-)
-{
-    constructor() : this("","",0L)
+) {
+    constructor() : this("", "", 0L)
 }
 
 /**

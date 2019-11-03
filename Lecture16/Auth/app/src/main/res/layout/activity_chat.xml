@@ -42,6 +42,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button3"
+            app:cornerRadius="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto Reply" />
     </LinearLayout>
 
 </LinearLayout>
