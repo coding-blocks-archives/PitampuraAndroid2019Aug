@@ -1,7 +1,10 @@
 package com.codingblocks.backgroundtasks
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         val datePickerDialog = TimePickerDialog(
             this, timeListener,
             myCalendar.get(Calendar.HOUR_OF_DAY),
-            myCalendar.get(Calendar.MINUTE),false
+            myCalendar.get(Calendar.MINUTE), false
         )
 
         datePickerDialog.show()
@@ -65,11 +68,25 @@ class MainActivity : AppCompatActivity() {
     private fun updateTimeLabel() {
         val format = "HH mm"
         val sdf = SimpleDateFormat(format, Locale.US)
+        setNotification()
 //        setText(sdf.format(myCalendar.time))    }
+    }
 
-    fun updateLabel(){
+    private fun setNotification() {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val i = Intent(this,CallReceiver::class.java)
+        i.putExtra("NAME","Alarm Manager")
+
+        val pedingIntent = PendingIntent.getBroadcast(
+            this,0,i,PendingIntent.FLAG_ONE_SHOT
+        )
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,myCalendar.timeInMillis,pedingIntent)
+    }
+
+    fun updateLabel() {
         val format = "EEE, d MMM yyyy"
-       val sdf = SimpleDateFormat(format, Locale.US)
+        val sdf = SimpleDateFormat(format, Locale.US)
 //       setText(sdf.format(myCalendar.time))
     }
 }
