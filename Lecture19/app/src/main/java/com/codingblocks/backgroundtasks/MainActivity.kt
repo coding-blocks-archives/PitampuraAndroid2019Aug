@@ -6,11 +6,16 @@ import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,11 +24,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        button.setOnClickListener {
 
-        registerReceiver(
-            CallReceiver(),
-            IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)
-        )
+            startWorker()
+        }
+
+    }
+
+    private fun startWorker() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val request = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setConstraints(constraints)
+            .setInitialDelay(1, TimeUnit.MINUTES)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(request)
+
     }
 
     fun setDate() {
@@ -75,13 +94,17 @@ class MainActivity : AppCompatActivity() {
     private fun setNotification() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val i = Intent(this,CallReceiver::class.java)
-        i.putExtra("NAME","Alarm Manager")
+        val i = Intent(this, CallReceiver::class.java)
+        i.putExtra("NAME", "Alarm Manager")
 
         val pedingIntent = PendingIntent.getBroadcast(
-            this,0,i,PendingIntent.FLAG_ONE_SHOT
+            this, 0, i, PendingIntent.FLAG_ONE_SHOT
         )
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,myCalendar.timeInMillis,pedingIntent)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            myCalendar.timeInMillis,
+            pedingIntent
+        )
     }
 
     fun updateLabel() {
