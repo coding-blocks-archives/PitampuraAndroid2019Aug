@@ -8,12 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -36,10 +34,10 @@ class MainActivity : AppCompatActivity() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
-        val request = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setConstraints(constraints)
-            .setInitialDelay(1, TimeUnit.MINUTES)
-            .build()
+        val request =
+            PeriodicWorkRequestBuilder<NotificationWorker>(PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,TimeUnit.MILLISECONDS)
+                .setConstraints(constraints)
+                .build()
 
         WorkManager.getInstance(this).enqueue(request)
 
