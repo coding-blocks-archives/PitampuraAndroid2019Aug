@@ -21,7 +21,7 @@ class UserRepository {
 //        return userData
 //    }
 
-    suspend fun getUser() = Client.service.getListUser("aggarwalpulkit596")
+    suspend fun getUser() = Client.service.getUser("aggarwalpulkit596")
 
     companion object {
         private var userRepository = UserRepository()

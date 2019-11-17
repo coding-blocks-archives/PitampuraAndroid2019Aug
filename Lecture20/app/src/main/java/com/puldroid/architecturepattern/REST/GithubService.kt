@@ -12,5 +12,9 @@ interface GithubService {
     suspend fun getUser(@Path("username") name: String) : Response<User>
 
     @GET("users/{username}")
-    suspend fun getListUser(@Path("username") name: String) : Response<List<User>>
+    suspend fun getPullkit(@Path("username") name: String) : Response<User>
+
+    @GET("users/{username}")
+    fun getUserTest(@Path("username") name: String) : Call<User>
+
 }

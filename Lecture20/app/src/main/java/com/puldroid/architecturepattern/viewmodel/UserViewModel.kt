@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
     private var userRepository: UserRepository = UserRepository.getInstance()
     var userData: MutableLiveData<User> = MutableLiveData()
-    var userListData: MutableLiveData<List<User>> = MutableLiveData()
+    var userListData: MutableLiveData<User> = MutableLiveData()
 
 
     init {
