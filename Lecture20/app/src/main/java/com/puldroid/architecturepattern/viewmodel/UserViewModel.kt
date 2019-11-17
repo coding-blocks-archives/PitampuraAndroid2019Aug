@@ -11,13 +11,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
-    private lateinit var userRepository: UserRepository
+    private var userRepository: UserRepository = UserRepository.getInstance()
     var userData: MutableLiveData<User> = MutableLiveData()
     var userListData: MutableLiveData<List<User>> = MutableLiveData()
 
 
     init {
-        userRepository = UserRepository.getInstance()
         getUser()
 
     }
